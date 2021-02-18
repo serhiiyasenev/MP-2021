@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>ConsoleApp_Task1_Core</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="StandardTask2">
+      <HintPath>..\..\StandardTask2\StandardTask2\bin\Debug\netstandard2.0\StandardTask2.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
