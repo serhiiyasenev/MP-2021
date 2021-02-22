@@ -11,7 +11,7 @@ namespace ConsoleApp_Task1_Core
             var name = args.Any() ? args[0] : "Empty Name";
             var greetings = Utilities.EnrichString(name);
             Console.WriteLine(greetings);
-            //Console.ReadKey();
+            Console.ReadKey();
         }
     }
 }
