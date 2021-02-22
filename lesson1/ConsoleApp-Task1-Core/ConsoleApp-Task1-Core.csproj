@@ -7,9 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="StandardTask2">
-      <HintPath>..\StandardTask2\bin\Debug\netstandard2.0\StandardTask2.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\StandardTask2\StandardTask2.csproj" />
   </ItemGroup>
 
 
