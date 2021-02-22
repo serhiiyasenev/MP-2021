@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <Reference Include="StandardTask2">
-      <HintPath>..\..\StandardTask2\StandardTask2\bin\Debug\netstandard2.0\StandardTask2.dll</HintPath>
+      <HintPath>..\..\Shared\StandardTask2.dll</HintPath>
     </Reference>
   </ItemGroup>
 

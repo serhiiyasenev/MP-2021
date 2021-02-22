@@ -33,8 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="StandardTask2">
-      <HintPath>..\..\StandardTask2\StandardTask2\bin\Debug\netstandard2.0\StandardTask2.dll</HintPath>
+    <Reference Include="StandardTask2, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Shared\StandardTask2.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
