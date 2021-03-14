@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace FileSystemVisitor.Base
+namespace FileSystemVisitorProj
 {
     public class IterationControlArgs
     {
