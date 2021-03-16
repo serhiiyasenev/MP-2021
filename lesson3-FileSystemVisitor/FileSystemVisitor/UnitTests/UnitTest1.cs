@@ -32,7 +32,7 @@ namespace UnitTests
         public void VerifyObjCountTest()
         {
 
-            var visit = new FileSystemVisitor(_directory.FullName);
+            var visit = new FileSystemVisitorProj.FileSystemVisitor(_directory.FullName);
             var actualCount = 0;
 
             foreach (var element in visit)
@@ -47,7 +47,7 @@ namespace UnitTests
         [Test]
         public void VerifyCountFilesWithNumber3Test()
         {
-            FileSystemVisitor visit = new FileSystemVisitor(_directory.FullName);
+            FileSystemVisitorProj.FileSystemVisitor visit = new FileSystemVisitorProj.FileSystemVisitor(_directory.FullName);
             visit.FileFinded += fileFinded;
             int actualCount = 0;
 
@@ -61,7 +61,7 @@ namespace UnitTests
         [Test]
         public void VerifyCountTextFileTest()
         {
-            FileSystemVisitor visit = new FileSystemVisitor(_directory.FullName, x => x.Extension == ".txt");
+            FileSystemVisitorProj.FileSystemVisitor visit = new FileSystemVisitorProj.FileSystemVisitor(_directory.FullName, x => x.Extension == ".txt");
             int actualCount = 0;
 
             foreach (var element in visit)
@@ -74,7 +74,7 @@ namespace UnitTests
         [Test]
         public void VerifyCountFoldersWithNumber2Test()
         {
-            FileSystemVisitor visit = new FileSystemVisitor(_directory.FullName);
+            FileSystemVisitorProj.FileSystemVisitor visit = new FileSystemVisitorProj.FileSystemVisitor(_directory.FullName);
             visit.DirectoryFinded += directoryFinded;
             int actualCount = 0;
 
