@@ -1,7 +1,9 @@
 ﻿using NLog;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace FileSystemVisitorProj
 {
@@ -10,11 +12,10 @@ namespace FileSystemVisitorProj
         private DirectoryInfo root;
         private Logger logger;
         private Func<FileSystemInfo, bool> fileSystemFilter;
-        private bool terminateSearch;
-        private bool exclude;
 
-        public event EventHandler<IterationControlArgs> Start;
-        public event EventHandler<IterationControlArgs> Finish;
+        public event EventHandler Start;
+        public event EventHandler Finish;
+
         public event EventHandler<IterationControlArgs> FileFinded;
         public event EventHandler<IterationControlArgs> DirectoryFinded;
         public event EventHandler<IterationControlArgs> FilteredFileFinded;
@@ -35,120 +36,19 @@ namespace FileSystemVisitorProj
             logger = LogManager.GetCurrentClassLogger();
         }
 
-        
-        public IEnumerator<FileSystemInfo> GetEnumerator()
+        public IEnumerable<FileSystemInfo> GetItems()
         {
-            if (terminateSearch)
-            {
-                logger.Info("The end search.");
-                yield break;
-            }
+            var args = DefaultIterationControlArgs();
+            args.CurrentItem = root;
+            OnEventArg(Start, args);
 
-            IterationControlArgs args = DefaultIterationControlArgs();
-            args.CurrentFile = root;
-            OnEvent(Start, args);
-            if (args.TerminateSearch)
-            {
-                terminateSearch = true;
-                logger.Info("The end search.");
-                yield break;
-            }
+            var directories = GetDirectories();
+            var files = GeFiles();
+            var result = directories.Concat(files);
 
-            if (!args.Exclude)
-            {
-                if (fileSystemFilter(root))
-                    yield return root;
+            OnEventArg(Finish, args);
 
-                // Get Directories
-                foreach (DirectoryInfo d in root.GetDirectories())
-                {
-                    args = DefaultIterationControlArgs();
-                    args.CurrentFile = d;
-                    OnEvent(DirectoryFinded, args);
-                    if (args.TerminateSearch)
-                    {
-                        terminateSearch = true;
-                        logger.Info("The end search.");
-                        yield break;
-                    }
-                    if (args.Exclude)
-                    {
-                        logger.Warn("Folder was exclude.");
-                        continue;
-                    }
-
-                    if (fileSystemFilter(d))
-                    {
-                        args = DefaultIterationControlArgs();
-                        args.CurrentFile = d;
-                        OnEvent(FilteredDirectoryFinded, args);
-                        if (args.TerminateSearch)
-                        {
-                            terminateSearch = true;
-                            logger.Info("The end search.");
-                            yield break;
-                        }
-                        if (args.Exclude)
-                        {
-                            logger.Warn("Folder was exclude.");
-                            continue;
-                        }
-                    }
-                    var newVisitor = new FileSystemVisitor(d.FullName, fileSystemFilter);
-                    InheritAllEvents(newVisitor);
-                    foreach (var info in newVisitor)
-                    {
-                        if (fileSystemFilter(info))
-                            yield return info;
-                    }
-                }
-
-                // Get Files
-                foreach (FileInfo f in root.GetFiles())
-                {
-                    args = DefaultIterationControlArgs();
-                    args.CurrentFile = f;
-                    OnEvent(FileFinded, args);
-                    if (args.TerminateSearch)
-                    {
-                        terminateSearch = true;
-                        logger.Info("The end search.");
-                        yield break;
-                    }
-                    if (args.Exclude)
-                    {
-                        logger.Log(LogLevel.Warn, "Folder was exclude.");
-                        continue;
-                    }
-
-                    if (fileSystemFilter(f))
-                    {
-                        args = DefaultIterationControlArgs();
-                        args.CurrentFile = f;
-                        OnEvent(FilteredFileFinded, args);
-                        if (args.TerminateSearch)
-                        {
-                            terminateSearch = true;
-                            logger.Info("The end search.");
-                            yield break;
-                        }
-                        if (args.Exclude)
-                        {
-                            logger.Warn("Folder was exclude.");
-                            continue;
-                        }
-
-                        yield return f;
-                    }
-                }
-            }
-            args = DefaultIterationControlArgs();
-            OnEvent(Finish, args);
-            if (args.TerminateSearch)
-            {
-                terminateSearch = true;
-                logger.Info("The end search.");
-            }
+            return result;
         }
 
         private void OnEvent(EventHandler<IterationControlArgs> triggeredEvent, IterationControlArgs args)
@@ -156,18 +56,93 @@ namespace FileSystemVisitorProj
             triggeredEvent?.Invoke(this, args);
         }
 
-        private IterationControlArgs DefaultIterationControlArgs()
+        private void OnEventArg(EventHandler triggeredEvent, EventArgs args)
         {
-            return new IterationControlArgs { CurrentFile = null, Exclude = false, TerminateSearch = false };
+            triggeredEvent?.Invoke(this, args);
         }
 
-        private void InheritAllEvents(FileSystemVisitor newVisitor)
+        private IterationControlArgs DefaultIterationControlArgs()
         {
-            newVisitor.terminateSearch         = terminateSearch;
-            newVisitor.FileFinded              = FileFinded;
-            newVisitor.FilteredFileFinded      = FilteredFileFinded;
-            newVisitor.DirectoryFinded         = DirectoryFinded;
-            newVisitor.FilteredDirectoryFinded = FilteredDirectoryFinded;
+            return new IterationControlArgs { CurrentItem = null, Exclude = false, TerminateSearch = false };
+        }
+
+        private IEnumerable<FileSystemInfo> GetDirectories()
+        {
+            var directories = root.GetDirectories();
+
+            foreach (var d in directories)
+            {
+                var args = DefaultIterationControlArgs();
+                args.CurrentItem = d;
+                OnEvent(DirectoryFinded, args);
+
+                if (args.Exclude)
+                {
+                    logger.Warn("Folder was exclude.");
+                    continue;
+                }
+
+                if (fileSystemFilter(d))
+                {
+                    args = DefaultIterationControlArgs();
+                    args.CurrentItem = d;
+                    OnEvent(FilteredDirectoryFinded, args);
+
+                    if (args.Exclude)
+                    {
+                        logger.Warn("Folder was exclude.");
+                        continue;
+                    }
+                }
+                var newVisitor = new FileSystemVisitor(d.FullName, fileSystemFilter);
+                
+                foreach (var info in newVisitor)
+                {
+                    if (fileSystemFilter(info))
+                        yield return info;
+                }
+            }
+        }
+
+        private IEnumerable<FileSystemInfo> GeFiles()
+        {
+            foreach (var f in root.GetFiles())
+            {
+                var args = DefaultIterationControlArgs();
+                args.CurrentItem = f;
+                OnEvent(FileFinded, args);
+
+                if (args.Exclude)
+                {
+                    logger.Log(LogLevel.Warn, "Folder was exclude.");
+                    continue;
+                }
+
+                if (fileSystemFilter(f))
+                {
+                    args = DefaultIterationControlArgs();
+                    args.CurrentItem = f;
+                    OnEvent(FilteredFileFinded, args);
+
+                    if (args.Exclude)
+                    {
+                        logger.Warn("Folder was exclude.");
+                        continue;
+                    }
+
+                    yield return f;
+                }
+            }
+        }
+
+        public IEnumerator<FileSystemInfo> GetEnumerator()
+        {
+            return GetItems().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

@@ -1,7 +1,7 @@
 using FileSystemVisitorProj;
 using NUnit.Framework;
 using System.IO;
-using System.Text;
+using System.Linq;
 
 namespace UnitTests
 {
@@ -10,15 +10,22 @@ namespace UnitTests
     {
         private DirectoryInfo _directory;
 
-        [OneTimeSetUp]
+        private IFileSystemVisitor _fileSystemVisitor;
+
+        [SetUp]
         public void OneTimeSetUp()
         {
             _directory = Directory.CreateDirectory("TestDirectoryWithFilesAndFolders");
             for (var i = 0; i < 10; i++)
             {
-                using var fs = File.Create(Path.Combine(_directory.FullName, $"{i}File.txt"));
-                var info = new UTF8Encoding(true).GetBytes("This is some text in the file.");
-                fs.Write(info, 0, info.Length);
+                if (i  % 2 == 0)
+                {
+                    using var fs = File.Create(Path.Combine(_directory.FullName, $"{i}File.txt"));
+                }
+                else
+                {
+                    using var fs = File.Create(Path.Combine(_directory.FullName, $"{i}File.pdf"));
+                }
             }
 
             for (var i = 1; i <= 3; i++)
@@ -31,75 +38,68 @@ namespace UnitTests
         [Test]
         public void VerifyObjCountTest()
         {
-
-            var visit = new FileSystemVisitorProj.FileSystemVisitor(_directory.FullName);
+            _fileSystemVisitor = new FileSystemVisitor(_directory.FullName);
             var actualCount = 0;
 
-            foreach (var element in visit)
+            foreach (var element in _fileSystemVisitor)
             {
                 ++actualCount;
             }
 
-            var expectCount = 9;
+            var expectCount = _directory.GetFileSystemInfos("*", SearchOption.AllDirectories).Length;
             Assert.AreEqual(expectCount, actualCount);
         }
 
-        [Test]
-        public void VerifyCountFilesWithNumber3Test()
-        {
-            FileSystemVisitorProj.FileSystemVisitor visit = new FileSystemVisitorProj.FileSystemVisitor(_directory.FullName);
-            visit.FileFinded += fileFinded;
-            int actualCount = 0;
-
-            foreach (var element in visit)
-                ++actualCount;
-
-            int expectCount = 8;
-            Assert.AreEqual(expectCount, actualCount);
-        }
 
         [Test]
         public void VerifyCountTextFileTest()
         {
-            FileSystemVisitorProj.FileSystemVisitor visit = new FileSystemVisitorProj.FileSystemVisitor(_directory.FullName, x => x.Extension == ".txt");
-            int actualCount = 0;
-
-            foreach (var element in visit)
-                ++actualCount;
-
-            int expectCount = 3;
-            Assert.AreEqual(expectCount, actualCount);
+            _fileSystemVisitor = new FileSystemVisitor(_directory.FullName, x => x.Extension == ".txt");
+            foreach (var element in _fileSystemVisitor)
+            {
+                Assert.True(element.Extension.Equals(".txt"));
+            }
         }
 
         [Test]
-        public void VerifyCountFoldersWithNumber2Test()
+        public void VerifyDirectoryFinded()
         {
-            FileSystemVisitorProj.FileSystemVisitor visit = new FileSystemVisitorProj.FileSystemVisitor(_directory.FullName);
-            visit.DirectoryFinded += directoryFinded;
+            _fileSystemVisitor = new FileSystemVisitor(_directory.FullName);
+            _fileSystemVisitor.DirectoryFinded += directoryFinded;
             int actualCount = 0;
 
-            foreach (var v in visit)
+            foreach (var item in _fileSystemVisitor.Take(1))
             {
                 ++actualCount;
             }
 
-            int expectCount = 6;
-            Assert.AreEqual(expectCount, actualCount);
+        }
+
+        [Test]
+        public void VerifyFileFinded()
+        {
+            _fileSystemVisitor = new FileSystemVisitor(_directory.FullName);
+            _fileSystemVisitor.FileFinded += fileFinded;
+            int actualCount = 0;
+
+            foreach (var item in _fileSystemVisitor.Take(1))
+            {
+                ++actualCount;
+            }
+
         }
 
         void directoryFinded(object sender, IterationControlArgs e)
         {
-            if (e.CurrentFile.Name.Contains("2"))
-                e.Exclude = true;
+           Assert.True(e.CurrentItem is DirectoryInfo);
         }
 
         void fileFinded(object sender, IterationControlArgs e)
         {
-            if (e.CurrentFile.Name.Contains("3"))
-                e.Exclude = true;
+            Assert.True(e.CurrentItem is FileInfo);
         }
 
-        [OneTimeTearDown]
+        [TearDown]
         public void OneTimeTearDown()
         {
             _directory.Delete(true);

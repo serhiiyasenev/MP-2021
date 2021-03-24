@@ -1,10 +1,11 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace FileSystemVisitorProj
 {
-    public class IterationControlArgs
+    public class IterationControlArgs : EventArgs
     {
-        public FileSystemInfo CurrentFile { get; set; }
+        public FileSystemInfo CurrentItem { get; set; }
         public bool TerminateSearch { get; set; }
         public bool Exclude { get; set; }
     }
