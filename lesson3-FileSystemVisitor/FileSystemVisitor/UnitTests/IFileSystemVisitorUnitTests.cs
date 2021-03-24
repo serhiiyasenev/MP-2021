@@ -62,7 +62,7 @@ namespace UnitTests
 
         [Test]
         [TestCase(".pdf")]
-        [TestCase(".pdf")]
+        [TestCase(".txt")]
         [TestCase("")]
         public void VerifyCountTextFileTest(string extension)
         {

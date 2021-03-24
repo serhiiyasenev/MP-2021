@@ -109,7 +109,9 @@ namespace FileSystemVisitorProj
 
         private IEnumerable<FileSystemInfo> GeFiles()
         {
-            foreach (var f in root.GetFiles())
+            var files = root.GetFiles();
+
+            foreach (var f in files)
             {
                 var args = DefaultIterationControlArgs();
                 args.CurrentItem = f;
