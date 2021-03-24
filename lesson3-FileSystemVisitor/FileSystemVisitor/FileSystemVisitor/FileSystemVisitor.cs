@@ -18,6 +18,7 @@ namespace FileSystemVisitorProj
 
         public event EventHandler<IterationControlArgs> FileFinded;
         public event EventHandler<IterationControlArgs> DirectoryFinded;
+
         public event EventHandler<IterationControlArgs> FilteredFileFinded;
         public event EventHandler<IterationControlArgs> FilteredDirectoryFinded;
 
@@ -49,6 +50,7 @@ namespace FileSystemVisitorProj
             OnEventArg(Finish, args);
 
             return result;
+
         }
 
         private void OnEvent(EventHandler<IterationControlArgs> triggeredEvent, IterationControlArgs args)
@@ -93,13 +95,14 @@ namespace FileSystemVisitorProj
                         logger.Warn("Folder was exclude.");
                         continue;
                     }
-                }
-                var newVisitor = new FileSystemVisitor(d.FullName, fileSystemFilter);
-                
-                foreach (var info in newVisitor)
-                {
-                    if (fileSystemFilter(info))
-                        yield return info;
+                    var newVisitor = new FileSystemVisitor(d.FullName, fileSystemFilter);
+                    yield return newVisitor.root;
+
+                    foreach (var info in newVisitor)
+                    {
+                        if (fileSystemFilter(info))
+                            yield return info;
+                    }
                 }
             }
         }
@@ -114,7 +117,7 @@ namespace FileSystemVisitorProj
 
                 if (args.Exclude)
                 {
-                    logger.Log(LogLevel.Warn, "Folder was exclude.");
+                    logger.Log(LogLevel.Warn, "File was exclude.");
                     continue;
                 }
 
@@ -126,7 +129,7 @@ namespace FileSystemVisitorProj
 
                     if (args.Exclude)
                     {
-                        logger.Warn("Folder was exclude.");
+                        logger.Warn("File was exclude.");
                         continue;
                     }
 
