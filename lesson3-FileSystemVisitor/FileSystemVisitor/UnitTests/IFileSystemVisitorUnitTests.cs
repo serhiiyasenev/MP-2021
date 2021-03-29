@@ -160,6 +160,32 @@ namespace UnitTests
             }
         }
 
+        [Test]
+        public void VerifyFilteredDirectoryStartTest()
+        {
+            bool isInvoked = false;
+
+            _fileSystemVisitor = new FileSystemVisitor(_directory.FullName);
+            _fileSystemVisitor.Start += (s, e) => isInvoked = true;
+
+            _ = _fileSystemVisitor.GetItems().Count();
+
+            Assert.True(isInvoked);
+        }
+
+        [Test]
+        public void VerifyFilteredDirectoryFinishTest()
+        {
+            bool isInvoked = false;
+
+            _fileSystemVisitor = new FileSystemVisitor(_directory.FullName);
+            _fileSystemVisitor.Finish += (s, e) => isInvoked = true;
+
+            _ = _fileSystemVisitor.GetItems().Count();
+
+            Assert.True(isInvoked);
+        }
+
         bool Filter(FileSystemInfo x, string name)
         {
             return x.Name.Equals(name);

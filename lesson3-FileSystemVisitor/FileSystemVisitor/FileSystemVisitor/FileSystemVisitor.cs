@@ -50,7 +50,6 @@ namespace FileSystemVisitorProj
             OnEventArg(Finish, args);
 
             return result;
-
         }
 
         private void OnEvent(EventHandler<IterationControlArgs> triggeredEvent, IterationControlArgs args)
