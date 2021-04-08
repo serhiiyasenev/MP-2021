@@ -38,6 +38,7 @@ namespace Task2.Tests
         [TestCase("  ")]
         [TestCase("1,390,146")]
         [TestCase("$x190,235,421,127")]
+        [TestCase("$190,235,421,127")]
         [TestCase("0xFA1B")]
         [TestCase("0xFA1B")]
         [TestCase("16e07")]
@@ -51,6 +52,7 @@ namespace Task2.Tests
         }
 
         [TestCase("2147483649")]
+        [TestCase("2147483648")]
         [TestCase("-2147483649")]
         [TestCase("9999999999999999")]
         [TestCase("-9999999999999999")]
