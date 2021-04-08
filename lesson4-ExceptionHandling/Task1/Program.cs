@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace Task1
 {
@@ -6,21 +7,39 @@ namespace Task1
     {
         private static void Main(string[] args)
         {
-            string input;
+            string input = null;
             do
             {
                 Console.WriteLine("To finish the program, please, input STOP, to proceed - any other");
                 Console.WriteLine("Please, input your string:");
 
-                input = Console.ReadLine();
-                if (string.IsNullOrWhiteSpace(input) || string.IsNullOrEmpty(input))
+
+                try
                 {
-                    Console.WriteLine("String should NOT be null, empty or whitespace!");
-                }
-                else
-                {
+                    input = Console.ReadLine();
                     Console.WriteLine(input[0]);
                 }
+                catch (IndexOutOfRangeException e)
+                {
+                    Console.WriteLine(e);
+                }
+                catch (NullReferenceException e)
+                {
+                    Console.WriteLine(e);
+                }
+                catch (IOException e)
+                {
+                    Console.WriteLine(e);
+                }
+                catch (OutOfMemoryException e)
+                {
+                    Console.WriteLine(e);
+                }
+                catch (ArgumentOutOfRangeException e)
+                {
+                    Console.WriteLine(e);
+                }
+
             } while (input != null && !input.Equals("STOP"));
 
         }

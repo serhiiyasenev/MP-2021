@@ -1,5 +1,5 @@
-using System;
 using NUnit.Framework;
+using System;
 
 namespace Task2.Tests
 {
@@ -37,7 +37,7 @@ namespace Task2.Tests
         [TestCase("")]
         [TestCase("  ")]
         [TestCase("1,390,146")]
-        [TestCase("$190,235,421,127")]
+        [TestCase("$x190,235,421,127")]
         [TestCase("0xFA1B")]
         [TestCase("0xFA1B")]
         [TestCase("16e07")]
@@ -50,7 +50,7 @@ namespace Task2.Tests
             Assert.That(() => _parser.Parse(stringValue), Throws.InstanceOf<FormatException>());
         }
 
-        [TestCase("2147483648")]
+        [TestCase("2147483649")]
         [TestCase("-2147483649")]
         [TestCase("9999999999999999")]
         [TestCase("-9999999999999999")]

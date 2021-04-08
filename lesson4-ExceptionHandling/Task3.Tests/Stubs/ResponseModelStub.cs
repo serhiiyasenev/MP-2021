@@ -22,7 +22,7 @@ namespace Task3.Tests.Stubs
             if (_data.ContainsKey("action_result"))
                 return _data["action_result"];
 
-            return null;
+            return "Invalid userId";
         }
     }
 }
