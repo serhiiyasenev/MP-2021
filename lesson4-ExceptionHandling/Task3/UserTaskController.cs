@@ -1,4 +1,5 @@
 ﻿using Task3.DoNotChange;
+using Task3.Exception;
 
 namespace Task3
 {
@@ -13,32 +14,37 @@ namespace Task3
 
         public bool AddTaskForUser(int userId, string description, IResponseModel model)
         {
-            string message = GetMessageForModel(userId, description);
-            if (message != null)
+            try
             {
-                model.AddAttribute("action_result", message);
+                string message = GetMessageForModel(userId, description);
+                if (message != null)
+                {
+                    model.AddAttribute("action_result", message);
+                    return false;
+                }
+
+                return true;
+            }
+            catch (UserException e)
+            {
+                model.AddAttribute("action_result", e.Message);
                 return false;
             }
-
-            return true;
+            
         }
 
         private string GetMessageForModel(int userId, string description)
         {
             var task = new UserTask(description);
-            int result = _taskService.AddTaskForUser(userId, task);
+            var result = _taskService.AddTaskForUser(userId, task);
 
-
-            if (result == -1)
-                return "Invalid userId";
-
-            if (result == -2)
-                return "User not found";
-
-            if (result == -3)
-                return "The task already exists";
-
-            return null;
+            return result switch
+            {
+                -1 => throw new InvalidUserIdException(),
+                -2 => throw new UserNotFoundException(),
+                -3 => throw new TheTaskAlreadyExistsException(),
+                _ => null
+            };
         }
     }
 }

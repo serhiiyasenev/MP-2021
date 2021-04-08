@@ -19,10 +19,8 @@ namespace Task3.Tests.Stubs
 
         public string GetActionResult()
         {
-            if (_data.ContainsKey("action_result"))
-                return _data["action_result"];
-
-            return "Invalid userId";
+            var result = _data.ContainsKey("action_result") ? _data["action_result"] : null;
+            return result;
         }
     }
 }
