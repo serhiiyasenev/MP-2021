@@ -34,6 +34,8 @@ namespace Task2.Tests
             Assert.That(() => _parser.Parse(stringValue), Throws.ArgumentNullException);
         }
 
+        [TestCase("-")]
+        [TestCase("+")]
         [TestCase("")]
         [TestCase("  ")]
         [TestCase("1,390,146")]
@@ -56,7 +58,7 @@ namespace Task2.Tests
         [TestCase("-2147483649")]
         [TestCase("9999999999999999")]
         [TestCase("-9999999999999999")]
-        public void Parse_NumberOutOfInt32Range_ThrowFormatException(string stringValue)
+        public void Parse_NumberOutOfInt32Range_ThrowOverflowException(string stringValue)
         {
             Assert.That(() => _parser.Parse(stringValue), Throws.InstanceOf<OverflowException>());
         }
