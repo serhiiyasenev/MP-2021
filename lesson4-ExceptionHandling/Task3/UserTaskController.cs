@@ -16,7 +16,7 @@ namespace Task3
         {
             try
             {
-                string message = GetMessageForModel(userId, description);
+                var message = GetMessageForModel(userId, description);
                 if (message != null)
                 {
                     model.AddAttribute("action_result", message);
@@ -37,14 +37,7 @@ namespace Task3
         {
             var task = new UserTask(description);
             var result = _taskService.AddTaskForUser(userId, task);
-
-            return result switch
-            {
-                -1 => throw new InvalidUserIdException(),
-                -2 => throw new UserNotFoundException(),
-                -3 => throw new TheTaskAlreadyExistsException(),
-                _ => null
-            };
+            return result >=0 ? null : result.ToString();
         }
     }
 }
