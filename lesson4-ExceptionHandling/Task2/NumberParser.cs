@@ -38,17 +38,16 @@ namespace Task2
 
                     result *= 10;
                     result += c - '0';
-
-                    if (positive && result - int.MaxValue > 0)
-                        throw new OverflowException();
-
-                    if (!positive && int.MinValue + result > 0)
-                        throw new OverflowException();
                 }
-                if (positive)
-                    return (int)result;
 
-                return -(int)result;
+                checked
+                {
+                    var xx = positive ? result : -result;
+                    int i3 = (int)xx;
+                    Console.WriteLine(i3);
+                }
+
+                return positive ? (int) result : -(int) result;
             }
             catch (NullReferenceException e)
             {
