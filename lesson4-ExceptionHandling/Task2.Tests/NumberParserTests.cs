@@ -1,5 +1,5 @@
-using System;
 using NUnit.Framework;
+using System;
 
 namespace Task2.Tests
 {
@@ -18,7 +18,7 @@ namespace Task2.Tests
         [TestCase("+007", ExpectedResult = 7)]
         [TestCase("-007", ExpectedResult = -7)]
         [TestCase("-2147483648", ExpectedResult = int.MinValue)]
-        [TestCase("2147483647", ExpectedResult = int.MaxValue)]
+        [TestCase("+2147483647", ExpectedResult = int.MaxValue)]
         [TestCase("-12034", ExpectedResult = -12034)]
         [TestCase("-12034    ", ExpectedResult = -12034)]
         public int Parse_ValidNumberString_ReturnsInt32Value(string stringValue)
@@ -34,9 +34,12 @@ namespace Task2.Tests
             Assert.That(() => _parser.Parse(stringValue), Throws.ArgumentNullException);
         }
 
+        [TestCase("-")]
+        [TestCase("+")]
         [TestCase("")]
         [TestCase("  ")]
         [TestCase("1,390,146")]
+        [TestCase("$x190,235,421,127")]
         [TestCase("$190,235,421,127")]
         [TestCase("0xFA1B")]
         [TestCase("0xFA1B")]
@@ -50,11 +53,12 @@ namespace Task2.Tests
             Assert.That(() => _parser.Parse(stringValue), Throws.InstanceOf<FormatException>());
         }
 
+        [TestCase("2147483649")]
         [TestCase("2147483648")]
         [TestCase("-2147483649")]
         [TestCase("9999999999999999")]
         [TestCase("-9999999999999999")]
-        public void Parse_NumberOutOfInt32Range_ThrowFormatException(string stringValue)
+        public void Parse_NumberOutOfInt32Range_ThrowOverflowException(string stringValue)
         {
             Assert.That(() => _parser.Parse(stringValue), Throws.InstanceOf<OverflowException>());
         }
