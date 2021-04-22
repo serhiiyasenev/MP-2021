@@ -10,7 +10,7 @@ namespace Task1
     {
         public static IEnumerable<Customer> Linq1(IEnumerable<Customer> customers, decimal limit)
         {
-            var result = customers.Where(c => c.Orders.Sum(o => o.Total) > limit).ToList();
+            var result = customers.Where(c => c.Orders.Sum(o => o.Total) > limit);
             return result;
         }
 
@@ -22,7 +22,8 @@ namespace Task1
 
         public static IEnumerable<(Customer customer, IEnumerable<Supplier> suppliers)> Linq2UsingGroup(IEnumerable<Customer> customers, IEnumerable<Supplier> suppliers)
         {
-            var result = customers.GroupJoin(suppliers, customer => new { customer.City, customer.Country },
+            var result = customers.GroupJoin(suppliers,
+                 customer      => new { customer.City, customer.Country },
                  innerSupplier => new { innerSupplier.City, innerSupplier.Country },
                  (selectedCustomer, innerSupplier) => (selectedCustomer, innerSupplier));
             return result;
@@ -37,17 +38,19 @@ namespace Task1
 
         public static IEnumerable<(Customer customer, DateTime dateOfEntry)> Linq4(IEnumerable<Customer> customers)
         {
-            var result = customers.Where(c => c.Orders.Length != 0).Select(c => (c, c.Orders.Min(o => o.OrderDate)));
+            var result = customers.Where(c => c.Orders.Length > 0).Select(c => (c, c.Orders.Min(o => o.OrderDate)));
             return result;
         }
 
         public static IEnumerable<(Customer customer, DateTime dateOfEntry)> Linq5(IEnumerable<Customer> customers)
         {
-            var result = customers.Where(c => c.Orders.Length != 0).Select(c => (c, c.Orders.Min(o => o.OrderDate)))
+            var result = customers
+                .Where(c => c.Orders.Length > 0)
+                .Select(c => (c, c.Orders.Min(o => o.OrderDate)))
                 .OrderBy(cd => cd.Item2.Year)
                 .ThenBy(cd => cd.Item2.Month)
                 .ThenByDescending(cd => cd.c.Orders.Sum(o => o.Total))
-                .ThenBy(cd => cd.c.CompanyName).ToList();
+                .ThenBy(cd => cd.c.CompanyName);
 
             return result;
         }
@@ -57,7 +60,8 @@ namespace Task1
             var result = customers.Where(c =>
                 Regex.IsMatch(c.PostalCode, @"[A-Za-z]+") 
                 || !Regex.IsMatch(c.Phone, @"^\(.*?\)") 
-                || c.Region == string.Empty || c.Region == null);
+                || c.Region == string.Empty || c.Region == null
+                );
 
             return result;
         }
@@ -67,12 +71,11 @@ namespace Task1
             var result = products.GroupBy(p => p.Category).Select(g => new Linq7CategoryGroup
             {
                 Category = g.Key,
-                UnitsInStockGroup = g.Select(p => new Linq7UnitsInStockGroup
+                UnitsInStockGroup = g.GroupBy(c => c.UnitsInStock).Select(p => new Linq7UnitsInStockGroup
                 {
-                    UnitsInStock = p.UnitsInStock,
-                    Prices = g.Select(product => product.UnitPrice).OrderBy(price => price).ToList()
-                })
-            }).ToList();
+                    Prices = g.Select(product => product.UnitPrice)
+                }).OrderBy(price => price)
+            });
 
             return result;
         }
@@ -96,15 +99,24 @@ namespace Task1
 
         public static IEnumerable<(string city, int averageIncome, int averageIntensity)> Linq9(IEnumerable<Customer> customers)
         {
-            var result = customers.GroupBy(c => c.City).Select(g 
-                => (g.Key, (int)Math.Round(g.Average(c => c.Orders.Sum(o => o.Total))), 
-                (int)Math.Round(g.Average(c => c.Orders.Length)))).ToList();
+            var result = customers
+                .GroupBy(c => c.City)
+                .Select(g => 
+                    (g.Key, 
+                        (int)Math.Round(g.Average(c => c.Orders.Sum(o => o.Total))), 
+                        (int)Math.Round(g.Average(c => c.Orders.Length))));
+            
             return result;
         }
 
         public static string Linq10(IEnumerable<Supplier> suppliers)
         {
-            var result = string.Join("", suppliers.Select(s => s.Country).Distinct().OrderBy(c => c.Length).ThenBy(c => c[0]));
+            var result = string.Join("", suppliers
+                .Select(s => s.Country)
+                .Distinct()
+                .OrderBy(c => c.Length)
+                .ThenBy(c => c[0]));
+
             return result;
         }
     }
