@@ -87,12 +87,12 @@ namespace Task1
                 isCheap = p.UnitPrice <= cheap,
                 isMiddle = p.UnitPrice <= middle & p.UnitPrice > cheap,
                 isExpensive = p.UnitPrice <= expensive & p.UnitPrice > middle
-            }).Select(g =>
-            {
-                if (g.Key.isExpensive)
-                    return (expensive, g.AsEnumerable());
-                return g.Key.isMiddle ? (middle, g.AsEnumerable()) : (cheap, g.AsEnumerable());
-            }).ToList();
+            }).Select(g => 
+                g.Key.isExpensive 
+                ? (expensive, g.AsEnumerable()) 
+                : g.Key.isMiddle 
+                    ? (middle, g.AsEnumerable()) 
+                    : (cheap, g.AsEnumerable())).ToList();
 
             return result;
         }
@@ -115,7 +115,7 @@ namespace Task1
                 .Select(s => s.Country)
                 .Distinct()
                 .OrderBy(c => c.Length)
-                .ThenBy(c => c[0]));
+                .ThenBy(c => c?[0]));
 
             return result;
         }
