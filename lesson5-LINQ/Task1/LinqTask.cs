@@ -94,7 +94,7 @@ namespace Task1
                         })
                 }).Select(group =>
                 {
-                    var stocks = group.UnitsInStockGroup.ToArray();
+                    var stocks = group.UnitsInStockGroup.ToList();
                     stocks.Last().Prices = stocks.Last().Prices.OrderBy(p => p);
                     group.UnitsInStockGroup = stocks;
                     return group;
