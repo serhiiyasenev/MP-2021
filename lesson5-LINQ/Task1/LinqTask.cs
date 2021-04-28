@@ -78,6 +78,13 @@ namespace Task1
                             UnitsInStock = ug.Key,
                             Prices = ug.Select(u => u.UnitPrice)
                         })
+                })
+                .Select(group =>
+                {
+                    var stocks = group.UnitsInStockGroup.ToArray();
+                    stocks.Last().Prices = stocks.Last().Prices.OrderBy(p => p);
+                    group.UnitsInStockGroup = stocks;
+                    return group;
                 });
 
             return result;
