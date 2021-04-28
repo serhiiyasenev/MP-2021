@@ -57,7 +57,6 @@ namespace Task1
             /* Сгруппируйте все продукты по категориям, внутри – по наличию на складе, 
              * внутри последней группы отсортируйте по стоимости
              * example of Linq7result
-
              category - Beverages
 	            UnitsInStock - 39
 		            price - 19.0000
