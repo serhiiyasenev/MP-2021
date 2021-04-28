@@ -1,6 +1,6 @@
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using NUnit.Framework;
 using System.Linq;
 using Task1.DoNotChange;
 
@@ -217,7 +217,7 @@ namespace Task1.Tests
             var middleProducts = result.Single(_ => _.category == middle).products;
             Assert.That(middleProducts.Count(), Is.EqualTo(3));
             var expensiveProducts = result.Single(_ => _.category == expensive).products;
-            Assert.That(expensiveProducts.Count(), Is.EqualTo(1));
+            Assert.That(expensiveProducts.Count(), Is.EqualTo(2));
         }
 
         [Test]
