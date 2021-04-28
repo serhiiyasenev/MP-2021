@@ -174,13 +174,13 @@ namespace Task1.Tests
                     {
                         new Linq7UnitsInStockGroup
                         {
-                            UnitsInStock = 15,
-                            Prices = new [] { 10.0000M, 40.0000M }
+                            UnitsInStock = 13,
+                            Prices = new [] { 40.000M, 30.0000M }
                         },
                         new Linq7UnitsInStockGroup
                         {
-                            UnitsInStock = 13,
-                            Prices = new [] { 30.0000M }
+                            UnitsInStock = 15,
+                            Prices = new [] { 10.0000M, 40.0000M }
                         }
                     }
                 }

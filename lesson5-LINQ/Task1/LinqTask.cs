@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Task1.DoNotChange;
 
 namespace Task1
@@ -53,18 +54,33 @@ namespace Task1
 
         public static IEnumerable<Linq7CategoryGroup> Linq7(IEnumerable<Product> products)
         {
-            /* example of Linq7result
+            /* Сгруппируйте все продукты по категориям, внутри – по наличию на складе, 
+             * внутри последней группы отсортируйте по стоимости
+             * example of Linq7result
 
              category - Beverages
 	            UnitsInStock - 39
-		            price - 18.0000
 		            price - 19.0000
+		            price - 18.0000
 	            UnitsInStock - 17
 		            price - 18.0000
 		            price - 19.0000
              */
+            var result = products
+                .GroupBy(p => p.Category)
+                .Select(c => new Linq7CategoryGroup
+                {
+                    Category = c.Key,
+                    UnitsInStockGroup = c
+                        .GroupBy(ug => ug.UnitsInStock)
+                        .Select(ug => new Linq7UnitsInStockGroup
+                        {
+                            UnitsInStock = ug.Key,
+                            Prices = ug.Select(u => u.UnitPrice)
+                        })
+                });
 
-            throw new NotImplementedException();
+            return result;
         }
 
         public static IEnumerable<(decimal category, IEnumerable<Product> products)> Linq8(
