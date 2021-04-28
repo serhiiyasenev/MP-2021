@@ -70,15 +70,16 @@ namespace Task1
         {
             var result = products
                 .GroupBy(p => p.Category)
-                .Select(g => new Linq7CategoryGroup
+                .Select(c => new Linq7CategoryGroup
                 {
-                Category = g.Key,
-                UnitsInStockGroup = g
-                    .GroupBy(c => c.UnitsInStock)
-                    .Select(p => new Linq7UnitsInStockGroup
+                Category = c.Key,
+                UnitsInStockGroup = c
+                    .GroupBy(ug => ug.UnitsInStock)
+                    .Select(ug => new Linq7UnitsInStockGroup
                         {
-                            Prices = g.Select(product => product.UnitPrice)
-                        }).OrderBy(price => price)
+                        UnitsInStock = ug.Key,
+                        Prices = ug.Select(u => u.UnitPrice)
+                    })
             });
 
             return result;
