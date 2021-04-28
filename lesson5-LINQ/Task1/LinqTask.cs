@@ -111,11 +111,8 @@ namespace Task1
                 isMiddle = p.UnitPrice <= middle & p.UnitPrice > cheap,
                 isExpensive = p.UnitPrice <= expensive & p.UnitPrice > middle
             }).Select(g => 
-                g.Key.isExpensive 
-                ? (expensive, g.AsEnumerable()) 
-                : g.Key.isMiddle 
-                    ? (middle, g.AsEnumerable()) 
-                    : (cheap, g.AsEnumerable())).ToList();
+                g.Key.isExpensive ? (expensive, g.AsEnumerable()) : g.Key.isMiddle 
+                                                                  ? (middle, g.AsEnumerable()) : (cheap, g.AsEnumerable())).ToList();
 
             return result;
         }
