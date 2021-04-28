@@ -26,6 +26,14 @@ namespace Task1.Tests
             },
             new Product
             {
+                ProductID = 6,
+                ProductName = "Soup",
+                Category = "Condiments",
+                UnitPrice = 40.0000M,
+                UnitsInStock = 13
+            },
+            new Product
+            {
                 ProductID = 3,
                 ProductName = "Aniseed Syrup",
                 Category = "Condiments",
@@ -34,18 +42,18 @@ namespace Task1.Tests
             },
             new Product
             {
-                ProductID = 7,
-                ProductName = "Uncle Bob's Organic Dried Pears",
-                Category = "Condiments",
-                UnitPrice = 10.0000M,
-                UnitsInStock = 15
-            },
-            new Product
-            {
                 ProductID = 8,
                 ProductName = "Northwoods Cranberry Sauce",
                 Category = "Condiments",
                 UnitPrice = 40.0000M,
+                UnitsInStock = 15
+            },
+            new Product
+            {
+                ProductID = 7,
+                ProductName = "Uncle Bob's Organic Dried Pears",
+                Category = "Condiments",
+                UnitPrice = 10.0000M,
                 UnitsInStock = 15
             }
         };
