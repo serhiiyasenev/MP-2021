@@ -1,136 +1,147 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Tasks.DoNotChange;
 
 namespace Tasks
 {
+    public class Node<T>
+    {
+        public Node(T value)
+        {
+            Value = value;
+        }
+        public T Value { get; }
+
+        public Node<T> Previous { get; set; }
+
+        public Node<T> Next { get; set; }
+    }
+
     public class DoublyLinkedList<T> : IDoublyLinkedList<T>, IEnumerator<T>
     {
-        private T[] _array = new T[1];
-        private int _i = -1;
-        private int _arrayIndex = -1;
 
-        public T this[int index]
+        public DoublyLinkedList()
         {
-            get
-            {
-                if (index <= _arrayIndex)
-                {
-                    return _array[index];
-                }
-
-                return default;
-            }
-            set
-            {
-                if (index > _arrayIndex)
-                {
-                    return;
-                }
-
-                _array[index] = value;
-            }
+            Head = Tail;
         }
 
-        public int Length => _array.Length;
+        public Node<T> Head { get; set; }
+
+        public Node<T> Tail { get; set; }
+
+        public int Length => FromHeadToTail(Head);
+
+        private int FromHeadToTail(Node<T> node, int counter = 0)
+        {
+            
+            if (node != null)
+            {
+                counter++;
+                FromHeadToTail(node.Next, counter);
+            }
+            return counter;
+        }
+
+        private Node<T> FindNodeByValue(Node<T> node, T value)
+        {
+            if (node != null && node.Value.Equals(value))
+            {
+                return node;
+            }
+
+            if (node != null && node.Next == null)
+            {
+                return null;
+            }
+
+            return FindNodeByValue(node?.Next, value);
+        }
 
         public void Add(T e)
         {
-            _arrayIndex++;
+            var node = new Node<T>(e) { Next = null, Previous = Tail };
 
-            if (_arrayIndex >= Length)
+            if (Head == null)
             {
-                Array.Resize(ref _array, Length * 2);
+                Head = node;
             }
 
-            _array[_arrayIndex] = e;
+            
+            Tail = node;
         }
 
         public void AddAt(int index, T e)
         {
-            if (index < -1|| index > _arrayIndex + 1)
-            {
-                throw new IndexOutOfRangeException("Index should start from -1 and should not be more than DoublyLinkedList index + 1");
-            }
 
-            _arrayIndex++;
-
-            if (index >= Length)
-            {
-                Array.Resize(ref _array, Length * 2);
-            }
-
-            for (var i = index; i <= _arrayIndex; i++)
-            {
-                _array[i + 1] = _array[i];
-            }
-
-            _array[index] = e;
 
         }
 
         public T ElementAt(int index)
         {
-            var element = _array[index];
-            return element;
+            return default;
         }
 
-        public void Remove(T item)
+        public void Remove(T e)
         {
-            var start = Array.IndexOf(_array, item);
-
-            if (start == -1) return;
-            for (var i = start; i <= _arrayIndex - 1; i++)
+            if (Head.Value.Equals(e))
             {
-                _array[i] = _array[i + 1];
+                
             }
-            _arrayIndex--;
-            Array.Resize(ref _array, _arrayIndex + 1);
+
+            if (Tail.Value.Equals(e))
+            {
+                if (Tail.Previous != null)
+                {
+                    Tail = Tail.Previous;
+                    Tail.Next = null;
+                }
+                
+            }
+
+            var node = FindNodeByValue(Head, e);
+
+            if (node != null)
+            {
+                
+            }
+
         }
 
         public T RemoveAt(int index)
         {
 
-            if (index < 0 || index > _arrayIndex)
-            {
-               throw new IndexOutOfRangeException("Index should start from 0 and should not be more than DoublyLinkedList index");
-            }
-            for (var i = index; i <= _arrayIndex - 1; i++)
-            {
-                _array[i] = _array[i + 1];
-            }
-            _arrayIndex--;
-            Array.Resize(ref _array, _arrayIndex + 1);
+
             return default;
         }
 
         public bool MoveNext()
         {
-            _i++;
-            return _i < Length;
+            return default;
         }
 
         public void Reset()
         {
-            _i = -1;
+           
         }
 
-        object IEnumerator.Current => Current;
+        public T Current { get; }
 
-        public T Current => _array[_i];
+        object? IEnumerator.Current => Current;
 
-        public IEnumerator<T> GetEnumerator() => this;
+
+        public void Dispose()
+        {
+            // and ?
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return this;
+        }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
-        }
-
-        public void Dispose()
-        {
-            _array = null;
-            // and ?
         }
     }
 }

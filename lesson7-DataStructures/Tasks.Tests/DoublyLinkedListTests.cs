@@ -1,5 +1,5 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
+using System;
 using Xunit;
 
 namespace Tasks.Tests
@@ -43,6 +43,8 @@ namespace Tasks.Tests
         [Fact]
         public void Should_Throw_IndexOutOfRangeException_If_Index_Bigger_Or_Equal_Than_Length()
         {
+            System.Diagnostics.Debug.WriteLine("Hello, Should_Throw_IndexOutOfRangeException_If_Index_Bigger_Or_Equal_Than_Length");
+
             var list = new DoublyLinkedList<int>();
             list.Add(1);
             list.Add(3);
