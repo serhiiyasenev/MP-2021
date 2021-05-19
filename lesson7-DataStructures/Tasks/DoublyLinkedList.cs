@@ -2,8 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using Tasks.DoNotChange;
+using Tasks.DoublyLinkedList;
 
-namespace Tasks.DoublyLinkedList
+namespace Tasks
 {
     public class DoublyLinkedList<T> : IDoublyLinkedList<T>
     {
