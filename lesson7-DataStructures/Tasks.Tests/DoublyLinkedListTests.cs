@@ -1,6 +1,5 @@
-﻿using FluentAssertions;
-using System;
-using Tasks.DoublyLinkedList;
+﻿using System;
+using FluentAssertions;
 using Xunit;
 
 namespace Tasks.Tests
