@@ -26,11 +26,11 @@ namespace Tasks.DoublyLinkedList
 
         public T Current => _currentNode.Value;
 
-        object IEnumerator.Current => Current; // or object ?
+        object IEnumerator.Current => Current; // why object?
 
         public void Dispose()
         {
-            // what should be here
+            // what should be here?
         }
     }
 }
