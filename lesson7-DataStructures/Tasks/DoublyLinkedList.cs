@@ -6,15 +6,15 @@ using Tasks.DoublyLinkedList;
 
 namespace Tasks
 {
-    public class DoublyLinkedList<T> : IDoublyLinkedList<T>
+    public class DoublyLinkedList<T> : IDoublyLinkedList<T> where T : IEquatable<T>
     {
-        public Node<T> Value { get; set; }
+        public Node<T> Head { get; set; }
+        public Node<T> Tail { get; set; }
 
         public DoublyLinkedList()
         {
-            Value = new Node<T>();
-            Value.Next = Value;
-            Value.Previous = Value;
+            Head = null;
+            Tail = null;
             Length = 0;
         }
 
@@ -22,7 +22,7 @@ namespace Tasks
 
         public IEnumerator<T> GetEnumerator()
         {
-            return new DoublyLinkedListEnumerator<T>(Value);
+            return new DoublyLinkedListEnumerator<T>(Head);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -37,8 +37,8 @@ namespace Tasks
 
         public void AddAt(int index, T e)
         {
-            var currentItem = index == Length ? Value : GetNodeByIndex(index);
-            var node = new Node<T>(e, currentItem.Previous, currentItem);
+            var currentItem = index == Length ? Tail : GetNodeByIndex(index);
+            var node = new Node<T>(e, currentItem, currentItem);
             currentItem.Previous.Next = node;
             currentItem.Previous = node;
             Length++;
@@ -64,35 +64,48 @@ namespace Tasks
                 throw new IndexOutOfRangeException();
             }
 
-            Node<T> node = Value;
-            if (index < Length / 2)
-            {
-                for (var i = -1; i < index; i++)
-                    node = node.Next;
-            }
-            else
-            {
-                for (var i = 0; i < Length - index; i++)
-                    node = node.Previous;
-            }
 
-            return node;
-        }
+            Node<T> node1 = findNode(Head, 0);
 
-        private Node<T>? GetFirstNodeByValue(T item)
-        {
-            var node = Value;
+            return node1;
 
-            for (var i = 0; i < Length; i++)
+            Node<T> findNode(Node<T> node, int nodeIndex)
             {
-                node = node.Next;
-                if (node.Equals(item))
+                // node null --> return null
+
+                if (nodeIndex == index)
                 {
                     return node;
                 }
+                else
+                {
+                    return findNode(node.Next, nodeIndex++);
+                }
             }
+        }
 
-            return null;
+        private Node<T> GetFirstNodeByValue(T value) 
+        {
+            Node<T> node2 = findNode(Tail);
+
+            return node2;
+
+
+            Node<T> findNode(Node<T> node22)
+            {
+                if (node22 == null)
+                {
+                    return null;
+                }
+                if (node22.Value.Equals(value))
+                {
+                    return node22;
+                }
+                else
+                {
+                    return findNode(node22.Previous);
+                }
+            }
         }
 
         public T RemoveAt(int index)

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Tasks.DoublyLinkedList
+﻿namespace Tasks.DoublyLinkedList
 {
-    public class Node<T> : IEquatable<T>
+    public class Node<T>
     {
         public Node<T> Next;
         public Node<T> Previous;
@@ -23,12 +20,6 @@ namespace Tasks.DoublyLinkedList
             Previous = previous;
             Next = next;
             Value = value;
-        }
-
-
-        public bool Equals(T other)
-        {
-            return EqualityComparer<T>.Default.Equals(Value, other);
         }
     }
 }
