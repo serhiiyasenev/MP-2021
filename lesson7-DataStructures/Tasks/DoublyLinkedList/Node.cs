@@ -14,12 +14,5 @@
         {
             Value = value;
         }
-
-        public Node(T value, Node<T> previous, Node<T> next)
-        {
-            Previous = previous;
-            Next = next;
-            Value = value;
-        }
     }
 }

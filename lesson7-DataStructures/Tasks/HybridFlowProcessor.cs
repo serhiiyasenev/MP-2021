@@ -1,10 +1,9 @@
 ﻿using System;
 using Tasks.DoNotChange;
-using Tasks.DoublyLinkedList;
 
 namespace Tasks
 {
-    public class HybridFlowProcessor<T> : IHybridFlowProcessor<T>
+    public class HybridFlowProcessor<T> : IHybridFlowProcessor<T> where T : IEquatable<T>
     {
         private readonly DoublyLinkedList<T> _items = new DoublyLinkedList<T>();
 

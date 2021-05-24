@@ -5,26 +5,35 @@ namespace Tasks.DoublyLinkedList
 {
     public class DoublyLinkedListEnumerator<T> : IEnumerator<T>
     {
-        private readonly Node<T> _value;
+        private readonly Node<T> _start;
         private Node<T> _currentNode;
 
         public DoublyLinkedListEnumerator(Node<T> value)
         {
-            _value = _currentNode = value;
+            _start = value;
+
+            _currentNode = _start;
         }
 
         public bool MoveNext()
         {
-            _currentNode = _currentNode.Next;
-            return _currentNode != _value;
+            return _currentNode != null;
         }
 
         public void Reset()
         {
-            _currentNode = _value;
+            _currentNode = _start;
         }
 
-        public T Current => _currentNode.Value;
+        public T Current
+        {
+            get
+            {
+                var value = _currentNode.Value;
+                _currentNode = _currentNode.Next;
+                return value;
+            }
+        }
 
         object IEnumerator.Current => Current; // why object?
 
