@@ -3,26 +3,30 @@ using Tasks.DoNotChange;
 
 namespace Tasks
 {
-    public class HybridFlowProcessor<T> : IHybridFlowProcessor<T>
+    public class HybridFlowProcessor<T> : IHybridFlowProcessor<T> where T : IEquatable<T>
     {
+        private readonly DoublyLinkedList<T> _items = new DoublyLinkedList<T>();
+
         public T Dequeue()
         {
-            throw new NotImplementedException();
+            if (_items.Length == 0) throw new InvalidOperationException();
+            return _items.RemoveAt(0);
         }
 
         public void Enqueue(T item)
         {
-            throw new NotImplementedException();
+            _items.Add(item);
         }
 
         public T Pop()
         {
-            throw new NotImplementedException();
+            if (_items.Length == 0) throw new InvalidOperationException();
+            return _items.RemoveAt(0);
         }
 
         public void Push(T item)
         {
-            throw new NotImplementedException();
+            _items.AddAt(0, item);
         }
     }
 }
