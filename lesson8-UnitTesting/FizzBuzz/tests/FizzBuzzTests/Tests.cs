@@ -1,4 +1,4 @@
-using FizzBuzz;
+using FizzBuzzProj;
 using NUnit.Framework;
 using System;
 
@@ -16,20 +16,18 @@ namespace FizzBuzzTests
         [TestCase(95, "Buzz")]
         [TestCase(99, "Fizz")]
         [TestCase(100, "Buzz")]
-        public void Calc(int input, string expectedResult)
+        public void Generate_ShouldReturnExpected_ForNumberWithinRange(int input, string expectedResult)
         {
-            var actualResult = FizzBuzzClass.FizzBuzzResult(input);
-
+            var actualResult = FizzBuzz.Generate(input);
             Assert.AreEqual(expectedResult, actualResult);
         }
 
         [Test]
         [TestCase(0)]
         [TestCase(101)]
-        public void ThrowArgumentOutOfRangeException(int input)
+        public void Generate_ThrowsArgumentOutOfRangeException_ForNumberOutsideRange(int input)
         {
-
-            Assert.Catch<ArgumentOutOfRangeException>(() => FizzBuzzClass.FizzBuzzResult(input));
+            Assert.Catch<ArgumentOutOfRangeException>(() => FizzBuzz.Generate(input));
         }
     }
 }

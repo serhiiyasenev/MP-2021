@@ -1,22 +1,22 @@
 ﻿using System;
 
-namespace FizzBuzz
+namespace FizzBuzzProj
 {
-    public class FizzBuzzClass
+    public class FizzBuzz
     {
-        public static string FizzBuzzResult(int x)
+        public static string Generate(int number)
         {
-            if (x < 1 || x > 100)
+            if (number < 1 || number > 100)
             {
-                throw new ArgumentOutOfRangeException(x.ToString());
+                throw new ArgumentOutOfRangeException(number.ToString());
             }
 
-            return (x % 3 == 0, x % 5 == 0) switch
+            return (number % 3 == 0, number % 5 == 0) switch
             {
                 (true, true) => "FizzBuzz",
                 (true, _) => "Fizz",
                 (_, true) => "Buzz",
-                _ => x.ToString()
+                _ => number.ToString()
             };
         }
     }
