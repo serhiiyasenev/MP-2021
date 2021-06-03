@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FizzBuzzProj
+namespace FizzBuzz.Core
 {
     public class FizzBuzz
     {

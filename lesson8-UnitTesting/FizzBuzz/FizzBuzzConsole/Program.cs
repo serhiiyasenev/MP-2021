@@ -1,24 +1,12 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
-namespace FizzBuzzConsole
+namespace FizzBuzz.Console
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            static string Generate(int number)
-            {
-                return (number % 3 == 0, number % 5 == 0) switch
-                {
-                    (true, true) => "FizzBuzz",
-                    (true, _) => "Fizz",
-                    (_, true) => "Buzz",
-                    _ => number.ToString()
-                };
-            }
-
-            Enumerable.Range(1, 100).Select(Generate).ToList().ForEach(Console.WriteLine);
+            Enumerable.Range(1, 100).Select(Core.FizzBuzz.Generate).ToList().ForEach(System.Console.WriteLine);
         }
     }
 }

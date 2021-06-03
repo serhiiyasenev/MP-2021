@@ -1,10 +1,10 @@
-using FizzBuzzProj;
 using NUnit.Framework;
 using System;
 
-namespace FizzBuzzTests
+namespace FizzBuzz.Core.Tests
 {
-    public class Tests
+    [TestFixture]
+    public class FizzBuzzTests
     {
         [Test]
         [TestCase(1, "1")]
