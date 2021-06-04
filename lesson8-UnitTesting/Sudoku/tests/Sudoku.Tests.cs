@@ -6,7 +6,7 @@ namespace Sudoku.Tests
     [TestFixture]
     public class SudokuTests
     {
-        private readonly int[,] _validSolution = 
+        private readonly int[,] _validSolution =
         {
             {5,3,4,6,7,8,9,1,2},
             {6,7,2,1,9,5,3,4,8},
@@ -29,7 +29,7 @@ namespace Sudoku.Tests
         [Test]
         public void FailOnZeroInSolution()
         {
-            var solutionWithZero =  _validSolution;
+            var solutionWithZero = _validSolution.Clone() as int[,];
             solutionWithZero[0, 0] = 0;
             Assert.False(Sudoku.IsValid(solutionWithZero));
         }
@@ -43,9 +43,9 @@ namespace Sudoku.Tests
         [Test]
         public void ReturnFalseOnInvalidSolution()
         {
-            var invalidSolution = _validSolution;
-            invalidSolution[1, 1] = _validSolution[2, 2];
-            invalidSolution[2, 2] = _validSolution[1, 1];
+            var invalidSolution = _validSolution.Clone() as int[,];
+            invalidSolution[1, 1] = invalidSolution[2, 2];
+            invalidSolution[2, 2] = invalidSolution[1, 1];
             Assert.False(Sudoku.IsValid(invalidSolution));
         }
         
