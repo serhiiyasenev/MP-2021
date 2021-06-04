@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace RecentlyUsedList
 {
-    public class RecentlyUsedListSolver
+    public class RecentlyUsedStackSolver
     {
-        public RecentlyUsedListSolver(int capacity = 5)
+        public RecentlyUsedStackSolver(int capacity = 5)
         {
             if(capacity <= 0)
                 throw new ArgumentOutOfRangeException($"Capacity should be greater than zero: {capacity}");
@@ -14,12 +14,12 @@ namespace RecentlyUsedList
         
         private readonly List<string> _storage = new List<string>();
         public int Count => _storage.Count;
-        public int Capacity { get;  }
+        public int Capacity { get; }
 
-        public void Add(string element)
+        public void Push(string element)
         {
             if(string.IsNullOrEmpty(element))
-                throw new ArgumentNullException();
+                throw new ArgumentNullException($"Is null or empty {element}");
             
             if (_storage.Contains(element))
             {
@@ -30,21 +30,38 @@ namespace RecentlyUsedList
             {
                 _storage.Remove(_storage[0]);
             }
+
             _storage.Add(element);
         }
-        
+
+        public bool Pop(string element)
+        {
+            if (string.IsNullOrEmpty(element))
+                throw new ArgumentNullException($"Is null or empty {element}");
+
+            if (_storage.Count == 0)
+                throw new InvalidOperationException();
+
+            return _storage.Remove(element);
+        }
+
         public string this[int index]
         {
             get
             {
                 if(index < 0)
                     throw new IndexOutOfRangeException();
+                
+                //what else checks?
+
                 return _storage[Count - 1 - index];
             }
             set
             {
                 if(index < 0)
                     throw new IndexOutOfRangeException();
+
+                //what else checks?
 
                 _storage[Count - 1 - index] = value;
             }
