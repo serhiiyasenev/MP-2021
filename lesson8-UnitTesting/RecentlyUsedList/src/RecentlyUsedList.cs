@@ -51,8 +51,6 @@ namespace RecentlyUsedList
             {
                 if(index < 0)
                     throw new IndexOutOfRangeException();
-                
-                //what else checks?
 
                 return _storage[Count - 1 - index];
             }
@@ -61,7 +59,9 @@ namespace RecentlyUsedList
                 if(index < 0)
                     throw new IndexOutOfRangeException();
 
-                //what else checks?
+                if (string.IsNullOrEmpty(value))
+                    throw new ArgumentNullException($"Is null or empty {value}");
+
 
                 _storage[Count - 1 - index] = value;
             }

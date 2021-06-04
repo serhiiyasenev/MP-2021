@@ -52,12 +52,6 @@ namespace RecentlyUsedList.Tests
         }
 
         [Test] 
-        public void NullInsertionThrowsException()
-        {
-            Assert.Throws<ArgumentNullException>(() => list.Push(null));
-        }
-        
-        [Test] 
         public void ListIsEmptyByDefault()
         {
             Assert.AreEqual(0, list.Count);
@@ -114,9 +108,36 @@ namespace RecentlyUsedList.Tests
         [Test]
         [TestCase(null)]
         [TestCase("")]
-        public void ListThrowsExceptionWhenDeletingEmptyOrNullElement(string element)
+        public void ListThrowsExceptionWhenAddingEmptyOrNullElement(string element)
         {
             Assert.Throws<ArgumentNullException>(() => list.Push(element));
+        }
+
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        public void ListThrowsExceptionWhenDeletingEmptyOrNullElement(string element)
+        {
+            Assert.Throws<ArgumentNullException>(() => list.Pop(element));
+        }
+
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        public void ListThrowsExceptionWhenAddingEmptyOrNullViaIndexer(string element)
+        {
+            Assert.Throws<ArgumentNullException>(() => list[0] = element);
+        }
+
+        [Test]
+        public void AddElementViaIndexer()
+        {
+            list.Push("1");
+            list[0] = "0";
+            list[0] = "test";
+
+            Assert.AreEqual(1, list.Count);
+            Assert.AreEqual("test", list[0]);
         }
     }
 }
