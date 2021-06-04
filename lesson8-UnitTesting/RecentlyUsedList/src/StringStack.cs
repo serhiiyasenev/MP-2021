@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace RecentlyUsedList
 {
-    public class RecentlyUsedStackSolver
+    public class StringStack
     {
-        public RecentlyUsedStackSolver(int capacity = 5)
+        public StringStack(int capacity = 5)
         {
             if(capacity <= 0)
                 throw new ArgumentOutOfRangeException($"Capacity should be greater than zero: {capacity}");

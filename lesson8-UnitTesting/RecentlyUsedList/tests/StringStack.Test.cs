@@ -6,12 +6,12 @@ namespace RecentlyUsedList.Tests
     [TestFixture]
     public class RecentlyUsedListTest
     {
-        private RecentlyUsedStackSolver list;
+        private StringStack list;
 
         [SetUp]
         public void SetUp()
         {
-            list = new RecentlyUsedStackSolver();
+            list = new StringStack();
         }
 
         [Test]
@@ -62,13 +62,13 @@ namespace RecentlyUsedList.Tests
         [TestCase(0)]
         public void ListCapacityIsNotValid(int capacity)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new RecentlyUsedStackSolver(capacity));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new StringStack(capacity));
         }
         
         [Test] 
         public void ListAutomaticallyRemovingItemsOutOfBoundedCapacity()
         {
-            var listSolver = new RecentlyUsedStackSolver(1);
+            var listSolver = new StringStack(1);
             listSolver.Push("first");
             listSolver.Push("second");
 
@@ -102,7 +102,7 @@ namespace RecentlyUsedList.Tests
         [Test]
         public void EmptyListThrowsExceptionWhenDeletingElement()
         {
-            Assert.Throws<InvalidOperationException>(() => new RecentlyUsedStackSolver().Pop("first"));
+            Assert.Throws<InvalidOperationException>(() => new StringStack().Pop("first"));
         }
 
         [Test]
