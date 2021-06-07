@@ -1,4 +1,4 @@
-## Recently Used List Kata
+## Recently Used List Kata 
 
 Develop a recently-used-list class to hold strings
 uniquely in Last-In-First-Out order.
