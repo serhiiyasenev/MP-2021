@@ -52,7 +52,7 @@ namespace BrainstormSessions
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            loggerFactory.CreateLogger<ILoggerFactory>();
+            loggerFactory.AddLog4Net();
         }
 
         public async Task InitializeDatabaseAsync(IBrainstormSessionRepository repo)

@@ -1,13 +1,16 @@
-﻿using System.Threading.Tasks;
-using BrainstormSessions.Core.Interfaces;
+﻿using BrainstormSessions.Core.Interfaces;
 using BrainstormSessions.ViewModels;
+using log4net;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace BrainstormSessions.Controllers
 {
     public class SessionController : Controller
     {
         private readonly IBrainstormSessionRepository _sessionRepository;
+
+        private static readonly ILog _logger = LogManager.GetLogger(typeof(SessionController));
 
         public SessionController(IBrainstormSessionRepository sessionRepository)
         {
