@@ -51,8 +51,11 @@ namespace BrainstormSessions.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(NewSessionModel model)
         {
+            _logger.Debug($"Start of Index Method execution with model {model.SessionName}");
+
             if (!ModelState.IsValid)
             {
+                _logger.Warn($"ModelState is not valid {nameof(model)}");
                 return BadRequest(ModelState);
             }
             else
@@ -63,6 +66,8 @@ namespace BrainstormSessions.Controllers
                     Name = model.SessionName
                 });
             }
+
+            _logger.Debug($"Finish of Index Method execution with model {model.SessionName}");
 
             return RedirectToAction(actionName: nameof(Index));
         }
