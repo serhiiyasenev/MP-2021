@@ -35,6 +35,10 @@ namespace BrainstormSessions.Controllers
                 IdeaCount = session.Ideas.Count
             });
 
+            _logger.Info("Model is created");
+
+            _logger.Debug("Finish of Index Method execution");
+
             return View(model);
         }
 
