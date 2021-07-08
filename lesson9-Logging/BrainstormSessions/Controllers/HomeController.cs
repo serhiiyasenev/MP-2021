@@ -23,7 +23,7 @@ namespace BrainstormSessions.Controllers
 
         public async Task<IActionResult> Index()
         {
-            _logger.Debug("Start of Index Method execution");
+            _logger.Info("Start of Index Method execution");
 
             var sessionList = await _sessionRepository.ListAsync();
 

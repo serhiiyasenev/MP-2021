@@ -1,6 +1,7 @@
 ﻿using BrainstormSessions.Core.Interfaces;
 using BrainstormSessions.Core.Model;
 using BrainstormSessions.Infrastructure;
+using log4net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -17,15 +18,13 @@ namespace BrainstormSessions
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(
-                optionsBuilder => optionsBuilder.UseInMemoryDatabase("InMemoryDb"));
+            services.AddDbContext<AppDbContext>(optionsBuilder => optionsBuilder.UseInMemoryDatabase("InMemoryDb"));
 
             services.AddControllersWithViews();
 
-            services.AddScoped<IBrainstormSessionRepository,
-                EFStormSessionRepository>();
+            services.AddScoped<IBrainstormSessionRepository, EFStormSessionRepository>();
 
-            services.AddLogging(o => o.AddLog4Net());
+            services.AddScoped(factory => LogManager.GetLogger(GetType()));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
@@ -48,8 +47,9 @@ namespace BrainstormSessions
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            loggerFactory.AddLog4Net("log4net.config");
+            loggerFactory.AddLog4Net();
         }
+
 
         public async Task InitializeDatabaseAsync(IBrainstormSessionRepository repo)
         {
