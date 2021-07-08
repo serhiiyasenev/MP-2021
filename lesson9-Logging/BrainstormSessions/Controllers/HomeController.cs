@@ -37,7 +37,7 @@ namespace BrainstormSessions.Controllers
 
             _logger.Info("Model is created");
 
-            _logger.Debug("Finish of Index Method execution");
+            _logger.Debug($"Finish of Index Method execution `{_logger.Logger.Name}`");
 
             return View(model);
         }

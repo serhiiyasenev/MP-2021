@@ -25,7 +25,7 @@ namespace BrainstormSessions
             services.AddScoped<IBrainstormSessionRepository,
                 EFStormSessionRepository>();
 
-            services.AddLogging();
+            services.AddLogging(o => o.AddLog4Net());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
