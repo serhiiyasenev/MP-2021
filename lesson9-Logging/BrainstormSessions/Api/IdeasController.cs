@@ -1,17 +1,19 @@
-﻿using System;
+﻿using BrainstormSessions.ClientModels;
+using BrainstormSessions.Core.Interfaces;
+using BrainstormSessions.Core.Model;
+using log4net;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BrainstormSessions.ClientModels;
-using BrainstormSessions.Core.Interfaces;
-using BrainstormSessions.Core.Model;
-using Microsoft.AspNetCore.Mvc;
 
 namespace BrainstormSessions.Api
 {
     public class IdeasController : ControllerBase
     {
         private readonly IBrainstormSessionRepository _sessionRepository;
+        private static readonly ILog _logger = LogManager.GetLogger(typeof(IdeasController));
 
         public IdeasController(IBrainstormSessionRepository sessionRepository)
         {
@@ -99,8 +101,11 @@ namespace BrainstormSessions.Api
         [ProducesResponseType(404)]
         public async Task<ActionResult<BrainstormSession>> CreateActionResult([FromBody]NewIdeaModel model)
         {
+            _logger.Debug($"Start of CreateActionResult Method execution with model {nameof(model)}");
+
             if (!ModelState.IsValid)
             {
+                _logger.Error($"ModelState {nameof(model)} is not valid");
                 return BadRequest(ModelState);
             }
 
@@ -108,6 +113,7 @@ namespace BrainstormSessions.Api
 
             if (session == null)
             {
+                _logger.Error("Session not found");
                 return NotFound(model.SessionId);
             }
 
@@ -120,6 +126,8 @@ namespace BrainstormSessions.Api
             session.AddIdea(idea);
 
             await _sessionRepository.UpdateAsync(session);
+
+            _logger.Debug($"Finish of CreateActionResult Method execution with model {nameof(model)}");
 
             return CreatedAtAction(nameof(CreateActionResult), new { id = session.Id }, session);
         }

@@ -1,5 +1,6 @@
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using System.IO;
 
 namespace BrainstormSessions
 {
@@ -7,6 +8,7 @@ namespace BrainstormSessions
     {
         public static void Main(string[] args)
         {
+            log4net.Config.XmlConfigurator.ConfigureAndWatch(new FileInfo("log4net.config"));
             CreateHostBuilder(args).Build().Run();
         }
 
