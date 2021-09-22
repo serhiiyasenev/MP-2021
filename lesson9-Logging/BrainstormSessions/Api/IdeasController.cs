@@ -101,7 +101,7 @@ namespace BrainstormSessions.Api
         [ProducesResponseType(404)]
         public async Task<ActionResult<BrainstormSession>> CreateActionResult([FromBody]NewIdeaModel model)
         {
-            _logger.Debug($"Start of CreateActionResult Method execution with model {model.Name}");
+            _logger.Debug($"Start of CreateActionResult Method execution with model {model.Name} and id {model.SessionId}");
 
             if (!ModelState.IsValid)
             {
@@ -117,7 +117,7 @@ namespace BrainstormSessions.Api
                 return NotFound(model.SessionId);
             }
 
-            var idea = new Idea()
+            var idea = new Idea
             {
                 DateCreated = DateTimeOffset.Now,
                 Description = model.Description,
@@ -127,7 +127,7 @@ namespace BrainstormSessions.Api
 
             await _sessionRepository.UpdateAsync(session);
 
-            _logger.Debug($"Finish of CreateActionResult Method execution with model {model.Name}");
+            _logger.Debug($"Finish of CreateActionResult Method execution with model {model.Name} and id {model.SessionId}");
 
             return CreatedAtAction(nameof(CreateActionResult), new { id = session.Id }, session);
         }
