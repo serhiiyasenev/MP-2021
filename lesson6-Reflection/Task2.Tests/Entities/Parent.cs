@@ -4,6 +4,6 @@
     {
         public int Property { get; } = 1;
 
-        public readonly string Filed = "123";
+        public readonly string Field = "123";
     }
 }
