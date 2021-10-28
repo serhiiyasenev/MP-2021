@@ -15,37 +15,23 @@ namespace Task1
             var mappedTypes = GetMappedTypes(assembly);
 
             foreach (var type in mappedTypes)
-		{
-			var contract = (type.GetCustomAttributes(typeof(ExportAttribute)).FirstOrDefault() as ExportAttribute)
-				?.Contract;
-			if (contract != null)
-				AddType(type, contract);
-			else
-				AddType(type);
-		}
-                    AddType(type);
-                else if ((type.GetCustomAttributes(typeof(ExportAttribute)).FirstOrDefault() as ExportAttribute)?.Contract != null)
-                    AddType(type,
-                        (type.GetCustomAttributes(typeof(ExportAttribute)).First() as ExportAttribute)?.Contract);
+            {
+                var contract = (type.GetCustomAttributes(typeof(ExportAttribute)).FirstOrDefault() as ExportAttribute)?.Contract;
+
+                if (contract != null)
+                    AddType(type, contract);
                 else
                     AddType(type);
+            }
         }
 
         public void AddType(Type type)
         {
-            // If Already added, update the injection type
-            if (_mappedTypes.ContainsKey(type))
-                _mappedTypes[type] = type;
             _mappedTypes.Add(type, type);
         }
 
         public void AddType(Type type, Type baseType)
         {
-            //TODO: ask why we should check it
-            // If Already added, update the injection type
-            //if (_mappedTypes.ContainsKey(baseType))
-            //  _mappedTypes[baseType] = type;
-            
             AddType(type);
             _mappedTypes.Add(baseType, type);
         }
@@ -59,21 +45,10 @@ namespace Task1
 
         private object Resolve(Type type)
         {
-            Type resolvedType;
-            try
-            {
-                resolvedType = _mappedTypes[type];
-            }
-            catch(Exception resolveException)
-            {
-                throw new Exception("Unable to find type : " + type, resolveException);
-            }
-            // Inject marked properties
-            var props = resolvedType.GetProperties().Where(
-                prop => Attribute.IsDefined(prop, typeof(ImportAttribute)));
-            // Inject marked fields
-            var fields = resolvedType.GetFields().Where(
-                field => Attribute.IsDefined(field, typeof(ImportAttribute)));
+            if (!_mappedTypes.ContainsKey(type))
+                throw new Exception($"Unable to find type: {type}");
+
+            var resolvedType = _mappedTypes[type];
 
             object resolvedObject;
             if (Attribute.IsDefined(resolvedType, typeof(ImportConstructorAttribute)))
@@ -87,16 +62,16 @@ namespace Task1
             else
             {
                 // If constructor hasn't parameter, create an instance of object
-                resolvedObject = Activator.CreateInstance(resolvedType); 
+                resolvedObject = Activator.CreateInstance(resolvedType);
+                // Inject marked properties
+                var props = resolvedType.GetProperties().Where(
+                    prop => Attribute.IsDefined(prop, typeof(ImportAttribute)));
+                foreach (var prop in props)
+                {
+                    prop.SetValue(resolvedObject, Resolve(prop.PropertyType));
+                }
             }
-            foreach (var prop in props)
-            {
-                prop.SetValue(resolvedObject,Resolve(prop.PropertyType));
-            }
-            foreach (var field in fields)
-            {
-                field.SetValue(resolvedObject,Resolve(field.FieldType));
-            }
+            
             return resolvedObject;
         }
 
@@ -105,8 +80,7 @@ namespace Task1
             return assembly.GetTypes().Where(t =>
                 Attribute.IsDefined(t, typeof(ExportAttribute)) ||
                 Attribute.IsDefined(t, typeof(ImportConstructorAttribute)) ||
-                t.GetProperties().Any(p => Attribute.IsDefined(p, typeof(ImportAttribute))) ||
-                t.GetFields().Any(f => Attribute.IsDefined(f, typeof(ImportAttribute))));
+                t.GetProperties().Any(p => Attribute.IsDefined(p, typeof(ImportAttribute))));
         }
     }
 }

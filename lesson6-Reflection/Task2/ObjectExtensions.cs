@@ -6,7 +6,6 @@ namespace Task2
     {
         public static void SetReadOnlyProperty(this object obj, string propertyName, object newValue)
         {
-            //TODO: how to do it without Mono? 
             var backingField = obj.GetType().GetProperty(propertyName).GetBackingField();
             backingField.SetValue(obj, newValue);
         }
