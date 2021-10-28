@@ -19,7 +19,14 @@ namespace Task1
                 t.GetFields().Any(f => Attribute.IsDefined(f, typeof(ImportAttribute))));
 
             foreach (var type in mappedTypes)
-                if (type.GetCustomAttributes(typeof(ExportAttribute)).FirstOrDefault() == null)
+		{
+			var contract = (type.GetCustomAttributes(typeof(ExportAttribute)).FirstOrDefault() as ExportAttribute)
+				?.Contract;
+			if (contract != null)
+				AddType(type, contract);
+			else
+				AddType(type);
+		}
                     AddType(type);
                 else if ((type.GetCustomAttributes(typeof(ExportAttribute)).FirstOrDefault() as ExportAttribute)?.Contract != null)
                     AddType(type,
