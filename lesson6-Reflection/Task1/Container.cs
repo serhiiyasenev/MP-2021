@@ -12,11 +12,7 @@ namespace Task1
 
         public void AddAssembly(Assembly assembly)
         {
-            var mappedTypes = assembly.GetTypes().Where(t =>
-                Attribute.IsDefined(t, typeof(ExportAttribute)) ||
-                Attribute.IsDefined(t, typeof(ImportConstructorAttribute)) ||
-                t.GetProperties().Any(p => Attribute.IsDefined(p, typeof(ImportAttribute))) ||
-                t.GetFields().Any(f => Attribute.IsDefined(f, typeof(ImportAttribute))));
+            var mappedTypes = GetMappedTypes(assembly);
 
             foreach (var type in mappedTypes)
                 if (type.GetCustomAttributes(typeof(ExportAttribute)).FirstOrDefault() == null)
@@ -95,6 +91,15 @@ namespace Task1
                 field.SetValue(resolvedObject,Resolve(field.FieldType));
             }
             return resolvedObject;
+        }
+
+        private static IEnumerable<Type> GetMappedTypes(Assembly assembly)
+        {
+            return assembly.GetTypes().Where(t =>
+                Attribute.IsDefined(t, typeof(ExportAttribute)) ||
+                Attribute.IsDefined(t, typeof(ImportConstructorAttribute)) ||
+                t.GetProperties().Any(p => Attribute.IsDefined(p, typeof(ImportAttribute))) ||
+                t.GetFields().Any(f => Attribute.IsDefined(f, typeof(ImportAttribute))));
         }
     }
 }
