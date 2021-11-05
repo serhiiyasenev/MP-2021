@@ -2,9 +2,9 @@
 
 namespace Task2
 {
-    public class CustomArgumentNullException : Exception
+    public class CustomException : Exception
     {
-        public CustomArgumentNullException(string message) : base(message)
+        public CustomException(string message) : base(message)
         {
         }
     }

@@ -8,7 +8,7 @@ namespace Task2
         {
             var property = obj.GetType().GetProperty(propertyName);
             if (property == null)
-                throw new CustomArgumentNullException($"The property with name {propertyName} was not found.");
+                throw new CustomException($"The property with name {propertyName} was not found.");
             var backingField = property.GetBackingField();
             backingField.SetValue(obj, newValue);
         }
@@ -17,7 +17,7 @@ namespace Task2
         {
             var field = obj.GetType().GetField(filedName);
             if (field == null)
-                throw new CustomArgumentNullException($"The field with name {filedName} was not found.");
+                throw new CustomException($"The field with name {filedName} was not found.");
             field.SetValue(obj, newValue);
         }
     }
