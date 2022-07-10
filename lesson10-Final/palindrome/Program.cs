@@ -9,7 +9,7 @@ namespace ConsoleApp10
             Console.WriteLine("---------START---------");
             Console.WriteLine();
 
-            var words = new[] {"kazak", "potop", "radar", "zakaz", "madam", "nurses run", "Palindrome", "TESTS", "false"};
+            var words = new[] {"true", "kazak", "potop", "radar", "zakaz", "madam", "nurses run", "Palindrome", "TESTS", "false"};
 
             foreach (var word in words)
             {
